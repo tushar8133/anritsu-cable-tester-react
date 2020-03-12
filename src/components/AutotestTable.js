@@ -62,9 +62,10 @@ class AutotestTable extends React.Component {
         return unique;
     }
 
-    formatDate() {
+    formatDate(type) {
         var dt = new Date();
-        return (`${dt.getFullYear().toString().padStart(4, '0')}-${(dt.getMonth() + 1).toString().padStart(2, '0')}-${dt.getDate().toString().padStart(2, '0')} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}:${dt.getSeconds().toString().padStart(2, '0')}`);
+        if(type === 'print') return (`${dt.getFullYear().toString().padStart(4, '0')}-${(dt.getMonth() + 1).toString().padStart(2, '0')}-${dt.getDate().toString().padStart(2, '0')} ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}:${dt.getSeconds().toString().padStart(2, '0')}`);
+        if(type === 'save') return (`${dt.getFullYear().toString().padStart(4, '0')}-${(dt.getMonth() + 1).toString().padStart(2, '0')}-${dt.getDate().toString().padStart(2, '0')}  (${dt.getHours().toString().padStart(2, '0')}${dt.getMinutes().toString().padStart(2, '0')})`);
     }
 
     exportData() {
@@ -73,22 +74,21 @@ class AutotestTable extends React.Component {
             alert("Name is required");
             return false;
         }
-        var date = this.formatDate();
         console.table(this.state.tableData)
         var data = [...this.state.tableData];
         var newData = data.map((obj, index) => {
-            return Object.assign({ index: index + 1 }, obj)
+            return Object.assign({ index: String(index + 1) }, obj)
         })
         // console.table(newData);
-        this.xlsxModule(person, date, newData);
+        this.xlsxModule(person, newData);
     }
 
-    xlsxModule(person, date, data) {
-        var ws = XLSX.utils.json_to_sheet([{ A: "Operator Name", B: person }, { A: "Date", B: date }], { header: ["A", "B"], skipHeader: true });
+    xlsxModule(person, data) {
+        var ws = XLSX.utils.json_to_sheet([{ A: "Operator Name", B: person }, { A: "Date", B: this.formatDate('print') }], { header: ["A", "B"], skipHeader: true });
         XLSX.utils.sheet_add_json(ws, data, { skipHeader: false, origin: "A4" });
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws);
-        XLSX.writeFile(wb, `Anritsu-${Date.now()}.xlsx`);
+        XLSX.writeFile(wb, `Anritsu Test -- ${this.formatDate('save')}.xlsx`);
     }
 }
 

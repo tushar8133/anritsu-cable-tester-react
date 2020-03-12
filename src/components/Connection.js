@@ -37,7 +37,6 @@ class Connection extends React.Component {
     }
 
     radioHandler(val) {
-        console.log(val);
         localStorage.setItem("address", val);
     }
 
