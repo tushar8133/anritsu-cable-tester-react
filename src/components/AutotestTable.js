@@ -14,6 +14,11 @@ class AutotestTable extends React.Component {
         this.setState({ tableData: finalData });
     }
 
+    componentDidUpdate() {
+        var scrollDiv = document.querySelector('#autotesttable > div');
+        scrollDiv.scrollTop = scrollDiv.scrollHeight;
+    }
+
     render() {
         return (
             <main id="autotesttable" align="center">
@@ -79,7 +84,7 @@ class AutotestTable extends React.Component {
     }
 
     xlsxModule(person, date, data) {
-        var ws = XLSX.utils.json_to_sheet([{ A: "Name", B: person }, { A: "Date", B: date }], { header: ["A", "B"], skipHeader: true });
+        var ws = XLSX.utils.json_to_sheet([{ A: "Operator Name", B: person }, { A: "Date", B: date }], { header: ["A", "B"], skipHeader: true });
         XLSX.utils.sheet_add_json(ws, data, { skipHeader: false, origin: "A4" });
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws);

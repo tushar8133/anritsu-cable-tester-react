@@ -157,19 +157,21 @@ html, body {
   height: 250px;
   width: 90%;
   overflow-y: scroll;
-  /*background-color: pink;*/
   margin: 30px auto;
   text-align: center;
-  border: 1px groove;
-}
-
-#autotesttable button {
-  font-size: 130%;
+  border: 0px groove;
 }
 
 #autotesttable table {
   width: 100%;
-  border: 0px solid lightgrey;
+  border: 0;
+}
+
+#autotesttable table th {
+  position: sticky;
+  top: 0;
+  background: #999;
+  padding: 4px;
 }
 
 #autotesttable table button {
@@ -193,6 +195,10 @@ html, body {
 
 #autotesttable table tr:hover {
   background-color: lightseagreen;
+}
+
+#autotesttable button {
+  font-size: 130%;
 }
 
 @-o-keyframes fadeIt {

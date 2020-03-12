@@ -29,15 +29,16 @@ class Autotest extends React.Component {
             setTimeout(_ => {
                 this.debounceRunning = true;
                 this.sendCommandToDevice();
-            }, 200);
+            }, 50);
         }
     }
 
     sendCommandToDevice() {
         var elem = document.getElementById('scanner');
+        var qrcode = elem.value;
+        if(!qrcode) return;
         elem.disabled = true;
         elem.removeAttribute("class", "backgroundAnimated");
-        var qrcode = elem.value;
 
         var power = document.getElementById('outputPowerLevel').value;
         var duration = document.getElementById('testDuration').value;
