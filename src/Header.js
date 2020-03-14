@@ -3,19 +3,6 @@ import { NavLink as Link } from "react-router-dom";
 
 class Header extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {favoritecolor: "red"};
-  }
-
-    componentDidMount() {
-      console.log("aaaa")
-    }
-    
-    componentDidUpdate() {
-      console.log("bbbb")
-    }
-
     render() {
       return (
         <header id="header-page">
