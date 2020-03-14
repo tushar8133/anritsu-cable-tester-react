@@ -14,8 +14,8 @@ class Autotest extends React.Component {
 
     render() {
         return (<main id="autotest">
-            <label>Output Power Level (dBm): <input type="number" defaultValue="43" min="20" max="46" id="outputPowerLevel" onInput={evt => this.savePower(evt.target.value)} /></label>
-            <label>Test Duration (sec): <input type="number" defaultValue="30" min="1" max="600" id="testDuration" onInput={evt => this.saveDuration(evt.target.value)} /></label>
+            <label>Output Power Level (dBm): <input type="number" id="outputPowerLevel" onInput={this.savePower} disabled={true}/></label>
+            <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration} /></label>
             <br />
             <input type="text" id="scanner" placeholder="Place scanner here" onInput={this.detectQR.bind(this)} className="backgroundAnimated" autoComplete="off" />
             <AutotestTable addon={this.state.newData} />
@@ -77,20 +77,47 @@ class Autotest extends React.Component {
         return (`${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}:${dt.getSeconds().toString().padStart(2, '0')}`);
     }
 
-    savePower(val) {
-        localStorage.setItem('power', val);
+    savePower(evt) {
+        if(evt) {
+            if(evt.target.value < 20) evt.target.value = 20;
+            if(evt.target.value > 46) evt.target.value = 46;
+            localStorage.setItem('power', evt.target.value);
+        } else {
+            var power = 43;
+            try {
+                var local = JSON.parse(localStorage.getItem('power'));
+                if(local) power = local;
+            } catch (e) {
+                console.log(e);
+            } finally {
+                document.getElementById('outputPowerLevel').value = power;
+                localStorage.setItem('power', power);
+            }
+        }
     }
 
-    saveDuration(val) {
-        localStorage.setItem('duration', val);
+    saveDuration(evt) {
+        if(evt) {
+            if(evt.target.value < 1) evt.target.value = 1;
+            if(evt.target.value > 600) evt.target.value = 600;
+            localStorage.setItem('duration', evt.target.value);
+        } else {
+            var duration = 30;
+            try {
+                var local = JSON.parse(localStorage.getItem('duration'));
+                if(local) duration = local;
+            } catch (e) {
+                console.log(e);
+            } finally {
+                document.getElementById('testDuration').value = duration;
+                localStorage.setItem('duration', duration);
+            }
+        }
     }
 
     componentDidMount() {
-        var power = localStorage.getItem('power');
-        if (power) document.getElementById('outputPowerLevel').value = power;
-
-        var duration = localStorage.getItem('duration');
-        if (duration) document.getElementById('testDuration').value = duration;
+        this.savePower();
+        this.saveDuration();
     }
 
 }
