@@ -1,22 +1,22 @@
-connection page alert fix
-Highlight current selected tab
-show global loader
-hide other navigation button while loading..
-Build production
-connection page redirection error
-integrate with socket.io
-merge with anritsu project
-check excel props
-format excel file bold headers
-[done] power and duration set limit 20 to 40
-[done] excel change to operator name
-[done] auto scroll down table
-[done] data table fixed headers
-[done] stop accepting blank values in automation
-[done] Export to Excel
 [done] Animation start stop on scanner click
-[done] change anritsu default color
+[done] Auto scroll down table
+[done] Change anritsu default color
+[done] Connection page alert fix
+[done] Connection page redirection error
+[done] Data table fixed headers
+[done] Excel change to operator name
+[done] Export to Excel
+[done] Hide other navigation button while loading..
+[done] Highlight current selected tab
 [done] Padding margin in whole applicaton
+[done] Power and duration set limit 20 to 40
+[done] Show global loader
+[done] Stop accepting blank values in automation
 [done] Table alternate color
 [done] Table hover color
 [done] Upper case class files
+Build production
+Check excel props
+Format excel file bold headers
+Integrate with socket.io
+Merge with anritsu project
