@@ -20,3 +20,4 @@ Check excel props
 Format excel file bold headers
 Integrate with socket.io
 Merge with anritsu project
+Keep saving table values after few minutes

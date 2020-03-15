@@ -1,5 +1,5 @@
 import React from 'react';
-import Service from '../Service';
+import connectMachine from '../service';
 
 class Pim extends React.Component {
     constructor(props) {
@@ -15,9 +15,9 @@ class Pim extends React.Component {
             	<label>Output Power Level (dBm): <input type="number" id="outputPowerLevel" onInput={this.savePower} /></label>
 	            <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration} /></label>
 	            <br />
-                <button onClick={_ => this.sendCommand('*ABC?')}>*ABC?</button>
-                <button onClick={_ => this.sendCommand('*DEF?')}>*DEF?</button>
-                <button onClick={_ => this.sendCommand('*XYZ?')}>*XYZ?</button>
+                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe PIM')}>PIM Vs Time</button>
+                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe PIMSwp')}>Swept PIM</button>
+                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe DTP')}>DTP</button>
                 <span className="spacer" />
                 <textarea id="textarea" rows="10" cols="60"></textarea>
             </main>
@@ -25,10 +25,8 @@ class Pim extends React.Component {
     }
 
     sendCommand(cmd) {
-        document.getElementById('textarea').value = 'Loading...';
-        var service = new Service();
-        service.sendCommand(cmd).then(_ => {
-            this.setResponse(_);
+        connectMachine('SCPI:PimPage', {}).then( data => {
+            this.setResponse(data);
         });
     }
 

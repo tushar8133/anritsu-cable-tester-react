@@ -1,42 +1,21 @@
-class Service {
+// import { * as io } from './socket.io.dev';
+import io from 'socket.io-client';
 
-    address;
-    constructor() {
-        this.address = localStorage.getItem('address');
-        document.getElementById('spinner').style.display = 'block';
-        // if(this.address === "" || this.address === null) {
-        //     alert("Please connect device!");
-        //     return false;
-        // }
-    }
+var socket = io();
 
-    getDeviceLists() {
-        return new Promise((resolve, reject) => {
-            setTimeout(_ => {
-                document.getElementById('spinner').style.display = 'none';
-                resolve(['aaa', 'bbb', 'ccc']);
-            }, 2000);
+function connectMachine(cmd, data = '') {
+	document.getElementById('spinner').style.display = 'block';
+
+    socket.emit('comm', {command: cmd, query: data});
+	
+    return new Promise((resolve, reject) => {
+        socket.on('comm', function(resp) {
+        	setTimeout( _ => {
+	            resolve(JSON.parse(resp));
+				document.getElementById('spinner').style.display = 'none';
+        	}, 1000)
         });
-    }
-
-    sendCommand(cmd) {
-        return new Promise((resolve, reject) => {
-            setTimeout(_ => {
-                document.getElementById('spinner').style.display = 'none';
-                resolve(cmd + ' with success response from machine...');
-            }, 500);
-        });
-    }
-
-    autoTest(power, duration) {
-        return new Promise((resolve, reject) => {
-            setTimeout(_ => {
-                document.getElementById('spinner').style.display = 'none';
-                resolve('auto response from machine...');
-            }, 1000);
-        });
-    }
-
+    });
 }
 
-export default Service;
+export default connectMachine;

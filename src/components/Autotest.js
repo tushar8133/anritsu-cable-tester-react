@@ -1,6 +1,6 @@
 import React from 'react';
 import AutotestTable from './AutotestTable';
-import Service from '../Service'
+import connectMachine from '../service';
 
 class Autotest extends React.Component {
     debounceRunning = true;
@@ -15,7 +15,7 @@ class Autotest extends React.Component {
     render() {
         return (<main id="autotest">
             <label>Output Power Level (dBm): <input type="number" id="outputPowerLevel" onInput={this.savePower} disabled={true}/></label>
-            <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration} /></label>
+            <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration}  disabled={true}/></label>
             <br />
             <input type="text" id="scanner" placeholder="Place scanner here" onInput={this.detectQR.bind(this)} className="backgroundAnimated" autoComplete="off" />
             <AutotestTable addon={this.state.newData} />
@@ -37,23 +37,24 @@ class Autotest extends React.Component {
         var elem = document.getElementById('scanner');
         var qrcode = elem.value;
         if(!qrcode) return;
-        elem.disabled = true;
-        elem.removeAttribute("class", "backgroundAnimated");
+        // elem.disabled = true;
+        // elem.removeAttribute("class", "backgroundAnimated");
 
         var power = document.getElementById('outputPowerLevel').value;
         var duration = document.getElementById('testDuration').value;
-        var service = new Service();
-        service.autoTest(power, duration).then(peakDataResp => {
-            this.formatFinalData(qrcode, peakDataResp, power, duration);
-            elem.disabled = false;
-            elem.setAttribute("class", "backgroundAnimated");
+
+        connectMachine('SCPI:AutoTestPage', {}).then( data => {
+            this.formatFinalData(qrcode, data, power, duration);
+            // elem.disabled = false;
+            // elem.setAttribute("class", "backgroundAnimated");
             elem.value = '';
             elem.focus();
         });
     }
 
     formatFinalData(qrcode, peakData, power, duration) {
-        var [dBm, dBc] = this.formatPeakData(peakData);
+        // TODO: check this String method requirement.
+        var [dBm, dBc] = this.formatPeakData(String(peakData));
         var timestamp = this.formatDate();
 
         var currentData = { qrcode, power, duration, dBm, dBc, timestamp };
@@ -116,6 +117,7 @@ class Autotest extends React.Component {
     }
 
     componentDidMount() {
+        // TODO: try to use these methods from PIM class file
         this.savePower();
         this.saveDuration();
     }

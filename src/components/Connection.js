@@ -1,11 +1,11 @@
 import React from 'react';
-import Service from '../Service';
+import connectMachine from '../service';
 
 class Connection extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            addresses: []
+            addresses: ['aa','bb']
         };
     }
 
@@ -29,10 +29,11 @@ class Connection extends React.Component {
     }
 
     getDeviceList() {
-        var service = new Service();
-        service.getDeviceLists().then(_ => {
-            this.setState(state => ({ addresses: _ }));
-            this.selectDefaultOption(_[0]);
+        console.log("getDeviceList()")
+        connectMachine('SCPI:ConnectionPage', {}).then( data => {
+            console.log("data here..", data)
+            this.setState(state => ({ addresses: data }));
+            this.selectDefaultOption(data[0]);
         });
     }
 

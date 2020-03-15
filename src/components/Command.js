@@ -1,5 +1,5 @@
 import React from 'react';
-import Service from '../Service';
+import connectMachine from '../service';
 
 class Command extends React.Component {
     constructor(props) {
@@ -28,10 +28,8 @@ class Command extends React.Component {
     }
 
     sendCommand(cmd) {
-        document.getElementById('textarea').value = 'Loading...';
-        var service = new Service();
-        service.sendCommand(cmd).then(_ => {
-            this.setResponse(_);
+        connectMachine('SCPI:CommandPage', {}).then( data => {
+            this.setResponse(data);
         });
     }
 
