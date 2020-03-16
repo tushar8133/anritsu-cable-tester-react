@@ -69,9 +69,9 @@ class AutotestTable extends React.Component {
     }
 
     exportData() {
-        var person = prompt("Please enter your name");
+        var person = prompt('Please enter OPERATOR NAME');
         if (!person) {
-            alert("Name is required");
+            alert('OPERATOR NAME is required!');
             return false;
         }
         console.table(this.state.tableData)
@@ -84,8 +84,8 @@ class AutotestTable extends React.Component {
     }
 
     xlsxModule(person, data) {
-        var ws = XLSX.utils.json_to_sheet([{ A: "Operator Name", B: person }, { A: "Date", B: this.formatDate('print') }], { header: ["A", "B"], skipHeader: true });
-        XLSX.utils.sheet_add_json(ws, data, { skipHeader: false, origin: "A4" });
+        var ws = XLSX.utils.json_to_sheet([{ A: 'Operator Name', B: person }, { A: 'Date', B: this.formatDate('print') }], { header: ['A', 'B'], skipHeader: true });
+        XLSX.utils.sheet_add_json(ws, data, { skipHeader: false, origin: 'A4' });
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws);
         XLSX.writeFile(wb, `Anritsu Test -- ${this.formatDate('save')}.xlsx`);

@@ -29,8 +29,7 @@ class Connection extends React.Component {
     }
 
     getDeviceList() {
-        console.log("getDeviceList()")
-        connectMachine('SCPI:ConnectionPage', {}).then( data => {
+        connectMachine('GET_DEVICE_LIST').then( data => {
             console.log("data here..", data)
             this.setState(state => ({ addresses: data }));
             this.selectDefaultOption(data[0]);

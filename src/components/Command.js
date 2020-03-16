@@ -28,7 +28,7 @@ class Command extends React.Component {
     }
 
     sendCommand(cmd) {
-        connectMachine('SCPI:CommandPage', {}).then( data => {
+        connectMachine(cmd).then( data => {
             this.setResponse(data);
         });
     }

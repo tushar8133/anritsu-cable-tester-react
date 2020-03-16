@@ -9,25 +9,53 @@ class Pim extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.savePower();
+        this.saveDuration();
+    }
+
     render() {
         return (
             <main id='pim-page'>
             	<label>Output Power Level (dBm): <input type="number" id="outputPowerLevel" onInput={this.savePower} /></label>
 	            <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration} /></label>
 	            <br />
-                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe PIM')}>PIM Vs Time</button>
-                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe PIMSwp')}>Swept PIM</button>
-                <button onClick={_ => this.sendCommand(':PIManalyzer:MODe DTP')}>DTP</button>
+                <button onClick={ _ => {this.pimvstimeHandler()} }>PIM Vs Time</button>
+                <button onClick={ _ => {this.sweptpimHandler()} }>Swept PIM</button>
+                <button onClick={ _ => {this.dtpHandler()} }>DTP</button>
                 <span className="spacer" />
                 <textarea id="textarea" rows="10" cols="60"></textarea>
             </main>
         )
     }
 
-    sendCommand(cmd) {
-        connectMachine('SCPI:PimPage', {}).then( data => {
-            this.setResponse(data);
-        });
+    pimvstimeHandler(){
+    	connectMachine('SENSe:PIManalyzer:MODe PIM')
+    	.then( data => {
+    		return connectMachine(':PIManalyzer:OUTPut:POWer' + ' ' +localStorage.getItem('power'));
+    	})
+    	.then( data => {
+    		return connectMachine(':PIManalyzer:TEST:DURation' + ' ' +localStorage.getItem('duration'));
+    	})
+    	.then( data => {
+    		this.setResponse(data);
+    	});
+    }
+
+    sweptpimHandler(){
+    	connectMachine(':PIManalyzer:MODe PIMSwp')
+    	.then( data => {
+    		return connectMachine(':INSTrument:NSELect 46');
+    	})
+    	.then( data => {
+    		this.setResponse(data);
+    	});
+    }
+    dtpHandler(){
+    	connectMachine(':PIManalyzer:MODe DTP')
+    	.then( data => {
+    		this.setResponse(data);
+    	});
     }
 
     setResponse(resp) {
@@ -71,11 +99,7 @@ class Pim extends React.Component {
 	    	}
 		}
 	}
-
-    componentDidMount() {
-        this.savePower();
-        this.saveDuration();
-    }
+    
 }
 
 export default Pim;

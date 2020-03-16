@@ -17,13 +17,13 @@ class Autotest extends React.Component {
             <label>Output Power Level (dBm): <input type="number" id="outputPowerLevel" onInput={this.savePower} disabled={true}/></label>
             <label>Test Duration (sec): <input type="number" id="testDuration" onInput={this.saveDuration}  disabled={true}/></label>
             <br />
-            <input type="text" id="scanner" placeholder="Place scanner here" onInput={this.detectQR.bind(this)} className="backgroundAnimated" autoComplete="off" />
+            <input type="text" id="scanner" placeholder="Place scanner here" onInput={this.waitForQRCode.bind(this)} className="backgroundAnimated" autoComplete="off" />
             <AutotestTable addon={this.state.newData} />
             <br />
         </main>);
     }
 
-    detectQR() {
+    waitForQRCode() {
         if (this.debounceRunning) {
             this.debounceRunning = false;
             setTimeout(_ => {
@@ -37,16 +37,16 @@ class Autotest extends React.Component {
         var elem = document.getElementById('scanner');
         var qrcode = elem.value;
         if(!qrcode) return;
-        // elem.disabled = true;
-        // elem.removeAttribute("class", "backgroundAnimated");
 
         var power = document.getElementById('outputPowerLevel').value;
         var duration = document.getElementById('testDuration').value;
 
-        connectMachine('SCPI:AutoTestPage', {}).then( data => {
+        connectMachine('INITiate:PIManalyzer:MEASure ON')
+        .then( data => {
+            return connectMachine(':PIManalyzer:MEASure:VALue?');
+        })
+        .then( data => {
             this.formatFinalData(qrcode, data, power, duration);
-            // elem.disabled = false;
-            // elem.setAttribute("class", "backgroundAnimated");
             elem.value = '';
             elem.focus();
         });
@@ -65,7 +65,7 @@ class Autotest extends React.Component {
     }
 
     formatPeakData(data) {
-        var arr = data.split(",");
+        var arr = data.split(',');
         arr[0] = ' ' + arr[0] + ' dBc';
         arr[1] = arr[1] + ' dBm';
         arr.reverse();
