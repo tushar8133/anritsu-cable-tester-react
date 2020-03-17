@@ -27,13 +27,14 @@ class Autotest extends React.Component {
         clearTimeout(this.debounceTimer);
         this.debounceTimer = setTimeout( _ => {
             this.sendCommandToDevice();
-        }, 50);
+        }, 100);
     }
 
     sendCommandToDevice() {
         var elem = document.getElementById('scanner');
         var qrcode = elem.value;
         if(!qrcode) return;
+        elem.disabled = true;
 
         var power = document.getElementById('outputPowerLevel').value;
         var duration = document.getElementById('testDuration').value;
@@ -44,6 +45,7 @@ class Autotest extends React.Component {
         })
         .then( data => {
             this.formatFinalData(qrcode, data, power, duration);
+            elem.disabled = false;
             elem.value = '';
             elem.focus();
         });
