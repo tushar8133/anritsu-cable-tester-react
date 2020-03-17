@@ -32,10 +32,10 @@ class Pim extends React.Component {
     pimvstimeHandler(){
     	connectMachine('SENSe:PIManalyzer:MODe PIM')
     	.then( data => {
-    		return connectMachine(':PIManalyzer:OUTPut:POWer' + ' ' +localStorage.getItem('power'));
+    		return connectMachine(':PIManalyzer:OUTPut:POWer ' + localStorage.getItem('power'));
     	})
     	.then( data => {
-    		return connectMachine(':PIManalyzer:TEST:DURation' + ' ' +localStorage.getItem('duration'));
+    		return connectMachine(':PIManalyzer:TEST:DURation ' + localStorage.getItem('duration'));
     	})
     	.then( data => {
     		this.setResponse(data);
