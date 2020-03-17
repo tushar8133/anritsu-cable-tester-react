@@ -3,7 +3,7 @@ import AutotestTable from './AutotestTable';
 import connectMachine from '../service';
 
 class Autotest extends React.Component {
-    debounceRunning = true;
+    debounceTimer;
 
     constructor(props) {
         super(props);
@@ -24,13 +24,10 @@ class Autotest extends React.Component {
     }
 
     waitForQRCode() {
-        if (this.debounceRunning) {
-            this.debounceRunning = false;
-            setTimeout(_ => {
-                this.debounceRunning = true;
-                this.sendCommandToDevice();
-            }, 50);
-        }
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout( _ => {
+            this.sendCommandToDevice();
+        }, 50);
     }
 
     sendCommandToDevice() {

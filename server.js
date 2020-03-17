@@ -3,6 +3,8 @@ var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+var timers = null;
+
 app.use('/', express.static(__dirname + '/build'));
 app.use('static', express.static(__dirname + '/build/static'));
 
@@ -16,7 +18,7 @@ io.on('connection', function(socket) {
   socket.on('comm', function(data) {
     var address = data.address;
     var command = data.command;
-
+    clearTimeout(timers);
     if(command === 'GET_DEVICE_LIST') {
       getDeviceList().then( resp => {
         console.log('Response >>> ', resp);
@@ -49,7 +51,7 @@ let sesn;
 
 function getDeviceList(){
     return new Promise((resolve, reject) => {
-      setTimeout( _ => {
+      timers = setTimeout( _ => {
         resolve(['abc', 'mno', 'xyz']);
       }, 1000);
     });
@@ -70,7 +72,7 @@ function getDeviceList(){
 
 function sendSCPI(address, query){
     return new Promise((resolve, reject) => {
-      setTimeout( _ => {
+      timers = setTimeout( _ => {
         resolve("Server: " + query);
       }, 1000);
     });
